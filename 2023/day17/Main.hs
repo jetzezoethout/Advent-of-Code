@@ -1,17 +1,12 @@
 module Main where
 
-import           City          (parseCity)
-import           Data.Maybe    (fromJust)
-import           OutgoingPath  (getPathsFrom, getUltraPathsFrom)
-import           ProcessFile   (processFile)
-import           SearchContext (findShortestPath, runSearchContext)
+import           City         (isFinalNode, parseCity)
+import           OutgoingPath (findShortestPath, getPathsIn, getUltraPathsIn)
+import           ProcessFile  (processFile)
 
 main :: IO ()
 main =
   processFile $ \text -> do
     let city = parseCity text
-    print $ fromJust $ runSearchContext city $ findShortestPath getPathsFrom
-    print
-      $ fromJust
-      $ runSearchContext city
-      $ findShortestPath getUltraPathsFrom
+    print $ findShortestPath (getPathsIn city) (isFinalNode city)
+    print $ findShortestPath (getUltraPathsIn city) (isFinalNode city)

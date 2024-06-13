@@ -114,7 +114,6 @@ executable day17
     other-modules:    City
                     , Node
                     , OutgoingPath
-                    , SearchContext
     build-depends:    utils
     hs-source-dirs:   day17
 
