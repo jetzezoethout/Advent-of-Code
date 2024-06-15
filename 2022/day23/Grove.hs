@@ -3,7 +3,6 @@ module Grove where
 import           Control.Monad (guard)
 import           Coordinate    (Coordinate (..))
 import           Data.List     (find)
-import           Data.Maybe    (fromMaybe)
 import           Data.Set      (Set)
 import qualified Data.Set      as S
 import           Data.Text     (Text)
@@ -36,10 +35,13 @@ roundsNeeded :: Grove -> Int
 roundsNeeded = go [North, South, West, East] 0
   where
     go preferredDirs acc grove =
-      case spreadOrFinish preferredDirs grove of
-        Nothing -> acc + 1
-        Just newGrove ->
-          go (tail preferredDirs <> [head preferredDirs]) (acc + 1) newGrove
+      let newGrove = spread preferredDirs grove
+       in if grove == newGrove
+            then acc + 1
+            else go
+                   (tail preferredDirs <> [head preferredDirs])
+                   (acc + 1)
+                   newGrove
 
 spreadTimes :: Int -> Grove -> Grove
 spreadTimes = go [North, South, West, East]
@@ -51,32 +53,22 @@ spreadTimes = go [North, South, West, East]
         . spread preferredDirs
 
 spread :: [Direction] -> Grove -> Grove
-spread preferredDirs grove =
-  fromMaybe grove $ spreadOrFinish preferredDirs grove
-
-spreadOrFinish :: [Direction] -> Grove -> Maybe Grove
-spreadOrFinish preferredDirs grove =
-  case S.foldr' addElf (0, S.empty) grove of
-    (0, _)        -> Nothing
-    (_, newGrove) -> Just newGrove
+spread preferredDirs grove = S.foldr' addElf grove grove
   where
     elf `canMoveTo` dir =
       all (`S.notMember` grove) $ elf `coordinatesTowards` dir
     movingDir elf =
       guard (any (`S.member` grove) (neighbours elf))
         >> find (elf `canMoveTo`) preferredDirs
-    addElf :: Coordinate -> (Int, Grove) -> (Int, Grove)
-    addElf elf (movements, acc) =
+    addElf :: Coordinate -> Grove -> Grove
+    addElf elf acc =
       case movingDir elf of
-        Nothing -> (movements, S.insert elf acc)
+        Nothing -> acc
         Just dir ->
           let target = elf `moveTowards` dir
            in if target `S.member` acc
-                then ( movements - 1
-                     , S.insert elf
-                         $ S.insert (target `moveTowards` dir)
-                         $ S.delete target acc)
-                else (movements + 1, S.insert target acc)
+                then S.insert (target `moveTowards` dir) $ S.delete target acc
+                else S.insert target $ S.delete elf acc
 
 coordinatesTowards :: Coordinate -> Direction -> [Coordinate]
 coord `coordinatesTowards` dir =
