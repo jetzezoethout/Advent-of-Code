@@ -1,0 +1,240 @@
+cabal-version:      3.0
+name:               aoc2021
+version:            0.1.0.0
+author:             Jetze Zoethout
+build-type:         Simple
+
+common common
+    ghc-options: -Wall -O2
+    default-extensions:   RecordWildCards
+                        , TypeApplications
+                        , OverloadedStrings
+                        , OverloadedRecordDot
+                        , InstanceSigs
+                        , DeriveFunctor
+                        , TupleSections
+    build-depends:    base ^>=4.17.2.1
+                    , text
+                    , split
+                    , containers
+                    , mtl
+                    , vector
+                    , clock
+                    , PSQueue
+    default-language: Haskell2010
+
+library utils
+    import:           common
+    exposed-modules:  Coordinate
+                    , Direction
+                    , Grid
+                    , Parsers
+                    , ProcessFile
+                    , TaggedRow
+                    , Cached
+    hs-source-dirs:   utils
+    default-language: Haskell2010
+
+executable day25
+    import:           common
+    main-is:          Main.hs
+    other-modules:    SeaCucumber
+                    , SeaFloor
+    build-depends:    utils
+    hs-source-dirs:   day25
+
+executable day24
+    import:           common
+    main-is:          Main.hs
+    other-modules:    Transformation
+    build-depends:    utils
+    hs-source-dirs:   day24
+
+executable day23
+    import:           common
+    main-is:          Main.hs
+    other-modules:    Amphipod
+                    , Chamber
+                    , BurrowTypes
+                    , Burrow
+    build-depends:    utils
+    hs-source-dirs:   day23
+
+
+executable day22
+    import:           common
+    main-is:          Main.hs
+    other-modules:    Range
+                    , Cuboid
+                    , RebootStep
+                    , CuboidCounter
+    build-depends:    utils
+    hs-source-dirs:   day22
+
+executable day21
+    import:           common
+    main-is:          Main.hs
+    other-modules:    Player
+                    , Game
+    build-depends:    utils
+    hs-source-dirs:   day21
+
+executable day20
+    import:           common
+    main-is:          Main.hs
+    other-modules:    Pixel
+                    , Algorithm
+                    , Image
+    build-depends:    utils
+    hs-source-dirs:   day20
+
+executable day19
+    import:           common
+    main-is:          Main.hs
+    other-modules:    Point
+                    , Scanner
+                    , Vector
+    build-depends:    utils
+    hs-source-dirs:   day19
+
+executable day18
+    import:           common
+    main-is:          Main.hs
+    other-modules:    SnailfishNumber
+                    , Leaf
+    build-depends:    utils
+    hs-source-dirs:   day18
+
+executable day17
+    import:           common
+    main-is:          Main.hs
+    other-modules:    TargetArea
+                    , PhaseSpace
+    build-depends:    utils
+    hs-source-dirs:   day17
+
+executable day16
+    import:           common
+    main-is:          Main.hs
+    other-modules:    Bit
+                    , Packet
+                    , BitsParser
+    build-depends:    utils
+    hs-source-dirs:   day16
+
+executable day15
+    import:           common
+    main-is:          Main.hs
+    other-modules:    Cavern
+                    , PathFinder
+    build-depends:    utils
+    hs-source-dirs:   day15
+
+executable day14
+    import:           common
+    main-is:          Main.hs
+    other-modules:    InsertionRule
+                    , Frequencies
+                    , PolymerTemplate
+    build-depends:    utils
+    hs-source-dirs:   day14
+
+executable day13
+    import:           common
+    main-is:          Main.hs
+    other-modules:    TransparentPaper
+                    , Fold
+    build-depends:    utils
+    hs-source-dirs:   day13
+
+executable day12
+    import:           common
+    main-is:          Main.hs
+    other-modules:    Cave
+                    , PathGenerator
+                    , ShortPath
+                    , LongPath
+    build-depends:    utils
+    hs-source-dirs:   day12
+
+executable day11
+    import:           common
+    main-is:          Main.hs
+    other-modules:    OctopusCavern
+    build-depends:    utils
+    hs-source-dirs:   day11
+
+executable day10
+    import:           common
+    main-is:          Main.hs
+    other-modules:    Chunk
+                    , Interpreter
+    build-depends:    utils
+    hs-source-dirs:   day10
+
+executable day09
+    import:           common
+    main-is:          Main.hs
+    other-modules:    HeightMap
+    build-depends:    utils
+    hs-source-dirs:   day09
+
+executable day08
+    import:           common
+    main-is:          Main.hs
+    other-modules:    Segment
+                    , DisplaySolver
+                    , BrokenDisplay
+    build-depends:    utils
+    hs-source-dirs:   day08
+
+executable day07
+    import:           common
+    main-is:          Main.hs
+    other-modules:    
+    build-depends:    utils
+    hs-source-dirs:   day07
+
+executable day06
+    import:           common
+    main-is:          Main.hs
+    other-modules:    School
+    build-depends:    utils
+    hs-source-dirs:   day06
+
+executable day05
+    import:           common
+    main-is:          Main.hs
+    other-modules:    Line
+    build-depends:    utils
+    hs-source-dirs:   day05
+
+executable day04
+    import:           common
+    main-is:          Main.hs
+    other-modules:    BingoCard
+                    , BingoNumber
+    build-depends:    utils
+    hs-source-dirs:   day04
+
+executable day03
+    import:           common
+    main-is:          Main.hs
+    other-modules:    Bit
+                    , Binary
+    build-depends:    utils
+    hs-source-dirs:   day03
+
+executable day02
+    import:           common
+    main-is:          Main.hs
+    other-modules:    Navigation
+    build-depends:    utils
+    hs-source-dirs:   day02
+
+executable day01
+    import:           common
+    main-is:          Main.hs
+    other-modules:    
+    build-depends:    utils
+    hs-source-dirs:   day01
