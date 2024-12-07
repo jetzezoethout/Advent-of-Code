@@ -5,10 +5,9 @@ import           Data.Map    (Map)
 import qualified Data.Map    as M
 import           Data.Maybe  (mapMaybe)
 import           Data.Text   (Text)
-import qualified Data.Text   as T
 import           Direction   (Direction, moveTowards)
+import           LocatedChar (LocatedChar (..), locateTextLines)
 import           SeaCucumber (SeaCucumber (..), directionOf, fromChar)
-import           TaggedRow   (TaggedRow (..), zipLines)
 
 data Dimensions = Dimensions
   { height :: Int
@@ -25,13 +24,9 @@ moveOnSeaFloor Dimensions {..} coord dir =
 type SeaFloor = Map Coordinate SeaCucumber
 
 parseSeaFloor :: [Text] -> SeaFloor
-parseSeaFloor textLines = M.fromList $ zipLines textLines >>= getSeaCucumbers
+parseSeaFloor = M.fromList . mapMaybe parseCucumber . locateTextLines
   where
-    getSeaCucumbers :: TaggedRow -> [(Coordinate, SeaCucumber)]
-    getSeaCucumbers TaggedRow {..} =
-      mapMaybe (\(col, ch) -> (Coordinate rowIndex col, ) <$> fromChar ch)
-        $ zip [0 ..]
-        $ T.unpack content
+    parseCucumber LocatedChar {..} = (location, ) <$> fromChar char
 
 moveUntilStop :: Dimensions -> SeaFloor -> Int
 moveUntilStop dimensions = go 0

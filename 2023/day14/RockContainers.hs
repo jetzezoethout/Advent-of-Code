@@ -1,11 +1,10 @@
 module RockContainers where
 
-import           Coordinate (Coordinate (..))
-import           Data.Set   (Set, fromList)
-import           Data.Text  (Text)
-import qualified Data.Text  as T
-import           Grid       (Grid, parseGrid)
-import           TaggedRow  (TaggedRow (..), parseTaggedLines)
+import           Coordinate  (Coordinate (..))
+import           Data.Set    (Set, fromList)
+import           Data.Text   (Text)
+import           Grid        (Grid, parseGrid)
+import           LocatedChar (LocatedChar (..), locateText)
 
 type FixedRockTeller = Grid Bool
 
@@ -15,10 +14,5 @@ parseFixedRocks :: Text -> Grid Bool
 parseFixedRocks = parseGrid (== '#')
 
 parseRollingRocks :: Text -> RollingRocks
-parseRollingRocks text = fromList $ map fst $ filter ((== 'O') . snd) pairs
-  where
-    taggedLines = parseTaggedLines text
-    pairsOnRow TaggedRow {..} =
-      zipWith (\colIndex char -> (Coordinate rowIndex colIndex, char)) [0 ..]
-        $ T.unpack content
-    pairs = taggedLines >>= pairsOnRow
+parseRollingRocks =
+  fromList . map location . filter ((== 'O') . char) . locateText

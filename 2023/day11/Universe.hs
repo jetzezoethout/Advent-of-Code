@@ -1,28 +1,16 @@
 module Universe where
 
-import           Control.Monad (guard, (<=<))
-import           Coordinate    (Coordinate (..), manhattanDistance)
-import           Data.List     (nub, (\\))
-import           Data.Maybe    (catMaybes)
-import           Data.Text     (Text)
-import qualified Data.Text     as T
-import           TaggedRow     (TaggedRow (..), parseTaggedLines)
+import           Coordinate  (Coordinate (..), manhattanDistance)
+import           Data.List   (nub, (\\))
+import           Data.Text   (Text)
+import           LocatedChar (LocatedChar (..), locateText)
 
 newtype Universe = Universe
   { galaxies :: [Coordinate]
   } deriving (Show)
 
 parseUniverse :: Text -> Universe
-parseUniverse = Universe . (parseUniverseRow <=< parseTaggedLines)
-  where
-    parseUniverseRow :: TaggedRow -> [Coordinate]
-    parseUniverseRow TaggedRow {..} =
-      catMaybes
-        $ zipWith
-            (\char colIndex ->
-               guard (char == '#') >> Just (Coordinate rowIndex colIndex))
-            (T.unpack content)
-            [0 ..]
+parseUniverse = Universe . map location . filter ((== '#') . char) . locateText
 
 getEmptyRows :: Universe -> [Int]
 getEmptyRows Universe {..} =

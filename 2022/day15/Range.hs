@@ -1,9 +1,8 @@
 module Range where
 
-import           Control.Monad (guard)
-import           Coordinate    (Coordinate (..))
-import           Data.List     (sort)
-import           SensorData    (SensorData (..), radius)
+import           Coordinate (Coordinate (..))
+import           Data.List  (sort)
+import           SensorData (SensorData (..), radius)
 
 data Range = Range
   { start :: Int
@@ -17,10 +16,9 @@ beaconlessShadow :: Int -> SensorData -> Maybe Range
 beaconlessShadow rowIndex SensorData {..} =
   let rowDistance = abs $ sensor.row - rowIndex
       offset = radius - rowDistance
-   in guard (offset >= 0)
-        >> Just
-             Range
-               {start = sensor.column - offset, end = sensor.column + offset}
+   in [ Range {start = sensor.column - offset, end = sensor.column + offset}
+      | offset > 0
+      ]
 
 mergeRanges :: [Range] -> [Range]
 mergeRanges ranges = go $ sort ranges

@@ -1,8 +1,7 @@
 module Deck where
 
-import           Control.Monad (guard)
-import           Data.Text     (Text)
-import           Parsers       (parseUnsignedInt)
+import           Data.Text (Text)
+import           Parsers   (parseUnsignedInt)
 
 type Card = Int
 
@@ -27,8 +26,7 @@ play (Deck cards) =
 
 createSubDeck :: Play -> Maybe Deck
 createSubDeck Play {..} =
-  guard (cardPlayed <= length (cards left))
-    >> Just (Deck $ take cardPlayed $ cards left)
+  [Deck $ take cardPlayed $ cards left | cardPlayed <= length (cards left)]
 
 insertOnBottom :: Deck -> [Card] -> Deck
 insertOnBottom (Deck cards) newCards = Deck $ cards <> newCards

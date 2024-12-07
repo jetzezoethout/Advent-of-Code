@@ -2,10 +2,9 @@ module TextToNumber
   ( extractNumber
   ) where
 
-import           Control.Monad (guard)
-import           Data.Monoid   (First (First, getFirst))
-import           Data.Text     (Text)
-import qualified Data.Text     as T
+import           Data.Monoid (First (First, getFirst))
+import           Data.Text   (Text)
+import qualified Data.Text   as T
 
 data TextToNumber = TextToNumber
   { prefix :: Text
@@ -13,7 +12,7 @@ data TextToNumber = TextToNumber
   } deriving (Show)
 
 getValue :: Text -> TextToNumber -> Maybe Int
-getValue text TextToNumber {..} = guard (T.isPrefixOf prefix text) >> Just value
+getValue text TextToNumber {..} = [value | T.isPrefixOf prefix text]
 
 getFirstValue :: Text -> [TextToNumber] -> Maybe Int
 getFirstValue text = getFirst . mconcat . map (First . getValue text)

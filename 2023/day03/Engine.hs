@@ -6,22 +6,16 @@ import           EngineIndicator (EngineIndicator (..), parseEngineIndicators)
 import           EngineNumber    (EngineNumber, isAdjacentTo,
                                   parseEngineNumbers)
 import           Gear            (Gear, getGear)
-import           TaggedRow       (TaggedRow, parseTaggedLines)
 
 data Engine = Engine
   { numbers    :: [EngineNumber]
   , indicators :: [EngineIndicator]
   } deriving (Show)
 
-parseEngineLines :: [TaggedRow] -> Engine
-parseEngineLines taggedLines =
-  Engine
-    { numbers = taggedLines >>= parseEngineNumbers
-    , indicators = taggedLines >>= parseEngineIndicators
-    }
-
 parseEngine :: Text -> Engine
-parseEngine = parseEngineLines . parseTaggedLines
+parseEngine text =
+  Engine
+    {numbers = parseEngineNumbers text, indicators = parseEngineIndicators text}
 
 isEnginePartNumber :: [EngineIndicator] -> EngineNumber -> Bool
 isEnginePartNumber indicators number =

@@ -1,6 +1,5 @@
 module Hike where
 
-import           Control.Monad   (guard)
 import           Data.IntSet     (IntSet)
 import qualified Data.IntSet     as S
 import           Data.Map.Strict ((!))
@@ -22,13 +21,13 @@ initialHike nodeId =
 
 takePath :: Hike -> OutgoingPath -> Maybe Hike
 takePath Hike {..} OutgoingPath {..} =
-  guard (not (target `S.member` visited))
-    >> Just
-         (Hike
-            { visited = S.insert target visited
-            , currentlyAt = target
-            , totalDistance = totalDistance + distance
-            })
+  [ Hike
+    { visited = S.insert target visited
+    , currentlyAt = target
+    , totalDistance = totalDistance + distance
+    }
+  | not $ target `S.member` visited
+  ]
 
 findLongestPath :: Graph -> Int
 findLongestPath graph = finalDistance + go 0 [initialHike 0]

@@ -6,9 +6,8 @@ import           Coordinate4D (Coordinate4D (Coordinate4D))
 import           Data.Set     (Set)
 import qualified Data.Set     as S
 import           Data.Text    (Text)
-import qualified Data.Text    as T
+import           LocatedChar  (LocatedChar (..), locateText)
 import           Spatial      (Spatial (..))
-import           TaggedRow    (TaggedRow (..), parseTaggedLines)
 
 newtype ConwayCubes a = ConwayCubes
   { activeCubes :: Set a
@@ -18,12 +17,7 @@ amountActive :: ConwayCubes a -> Int
 amountActive ConwayCubes {..} = S.size activeCubes
 
 parseConwayCubesXY :: Text -> [Coordinate]
-parseConwayCubesXY text = parseTaggedLines text >>= activeOnRow
-  where
-    activeOnRow TaggedRow {..} =
-      map
-        (Coordinate rowIndex . fst)
-        (filter ((== '#') . snd) $ zip [0 ..] $ T.unpack content)
+parseConwayCubesXY = map location . filter ((== '#') . char) . locateText
 
 parseConwayCubes3D :: Text -> ConwayCubes Coordinate3D
 parseConwayCubes3D =

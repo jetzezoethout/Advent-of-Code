@@ -1,10 +1,9 @@
 module Vector where
 
-import           Control.Monad (guard)
-import           Data.Ratio    ((%))
-import           Data.Text     (Text)
-import qualified Data.Text     as T
-import           Parsers       (parseIntegral)
+import           Data.Ratio ((%))
+import           Data.Text  (Text)
+import qualified Data.Text  as T
+import           Parsers    (parseIntegral)
 
 data Two
 
@@ -71,10 +70,7 @@ solve2 columns =
       coefficients2 = y columns
       constants = z columns
       determinant = det2 coefficients1 coefficients2
-   in guard (determinant /= 0)
-        >> Just
-             ((% determinant)
-                <$> Vector
-                      [ det2 constants coefficients2
-                      , det2 coefficients1 constants
-                      ])
+   in [ (% determinant)
+        <$> Vector [det2 constants coefficients2, det2 coefficients1 constants]
+      | determinant /= 0
+      ]

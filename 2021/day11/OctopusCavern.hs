@@ -9,21 +9,14 @@ import qualified Data.Map            as M
 import           Data.Set            (Set)
 import qualified Data.Set            as S
 import           Data.Text           (Text)
-import qualified Data.Text           as T
-import           TaggedRow           (TaggedRow (..), parseTaggedLines)
+import           LocatedChar         (LocatedChar (..), locateText)
 
 type OctopusCavern = Map Coordinate Int
 
 parseOctopusCavern :: Text -> Map Coordinate Int
-parseOctopusCavern text = M.fromList $ parseTaggedLines text >>= parseRow
+parseOctopusCavern = M.fromList . map parseEnergy . locateText
   where
-    parseRow TaggedRow {..} =
-      zipWith
-        (\colIndex energy -> (Coordinate rowIndex colIndex, energy))
-        [0 ..]
-        $ map parseEnergy
-        $ T.unpack content
-    parseEnergy ch = fromEnum ch - fromEnum '0'
+    parseEnergy LocatedChar {..} = (location, fromEnum char - fromEnum '0')
 
 flashForever :: OctopusCavern -> [Int]
 flashForever = evalState go

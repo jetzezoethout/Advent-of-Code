@@ -6,20 +6,13 @@ import           Data.List     (find)
 import           Data.Set      (Set)
 import qualified Data.Set      as S
 import           Data.Text     (Text)
-import qualified Data.Text     as T
 import           Direction     (Direction (..), moveTowards)
-import           TaggedRow     (TaggedRow (..), parseTaggedLines)
+import           LocatedChar   (LocatedChar (..), locateText)
 
 type Grove = Set Coordinate
 
 parseGrove :: Text -> Set Coordinate
-parseGrove text = S.fromList $ parseTaggedLines text >>= getElves
-  where
-    getElves TaggedRow {..} =
-      map (Coordinate rowIndex . fst)
-        $ filter ((== '#') . snd)
-        $ zip [0 ..]
-        $ T.unpack content
+parseGrove = S.fromList . map location . filter ((== '#') . char) . locateText
 
 emptySpaces :: Set Coordinate -> Int
 emptySpaces grove =

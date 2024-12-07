@@ -1,10 +1,9 @@
 module RangeMapper where
 
-import           Control.Monad (guard)
-import           Data.Text     (Text)
-import qualified Data.Text     as T
-import           Parsers       (parseUnsignedInt)
-import           Range         (Range (..), contains, intersect, shiftRange)
+import           Data.Text (Text)
+import qualified Data.Text as T
+import           Parsers   (parseUnsignedInt)
+import           Range     (Range (..), contains, intersect, shiftRange)
 
 data RangeMapper = RangeMapper
   { destinationStart :: Int
@@ -24,8 +23,7 @@ parseRangeMapper text =
 
 shift :: Int -> RangeMapper -> Maybe Int
 shift value RangeMapper {..} =
-  guard (sourceRange `contains` value)
-    >> Just (value - sourceRange.start + destinationStart)
+  [value - sourceRange.start + destinationStart | sourceRange `contains` value]
 
 singleImage :: RangeMapper -> Range -> Maybe Range
 singleImage RangeMapper {..} range =

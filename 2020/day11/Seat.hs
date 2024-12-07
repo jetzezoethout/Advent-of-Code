@@ -1,11 +1,11 @@
 module Seat where
 
-import           Coordinate (Coordinate (..), addCoordinate)
-import           Data.Map   (Map)
-import qualified Data.Map   as M
-import           Data.Text  (Text)
-import qualified Data.Text  as T
-import           TaggedRow  (TaggedRow (..), zipLines)
+import           Coordinate  (Coordinate (..), addCoordinate)
+import           Data.Map    (Map)
+import qualified Data.Map    as M
+import           Data.Maybe  (mapMaybe)
+import           Data.Text   (Text)
+import           LocatedChar (LocatedChar (..), locateTextLines)
 
 data Seat
   = Empty
@@ -15,13 +15,9 @@ data Seat
 type WaitingArea = Map Coordinate Seat
 
 parseWaitingArea :: [Text] -> WaitingArea
-parseWaitingArea textLines =
-  M.fromList $ map (, Empty) $ zipLines textLines >>= seatsOnRow
+parseWaitingArea = M.fromList . mapMaybe findEmptySeats . locateTextLines
   where
-    seatsOnRow TaggedRow {..} =
-      map
-        (Coordinate rowIndex . fst)
-        (filter ((== 'L') . snd) $ zip [0 ..] $ T.unpack content)
+    findEmptySeats LocatedChar {..} = [(location, Empty) | char == 'L']
 
 isOccupiedAt :: WaitingArea -> Coordinate -> Bool
 waitingArea `isOccupiedAt` coord = M.lookup coord waitingArea == Just Occupied

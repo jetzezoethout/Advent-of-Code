@@ -33,9 +33,8 @@ validatePassport PassportFields {..} = do
 parseBoundedInt :: Int -> Int -> Text -> Maybe Int
 parseBoundedInt lower upper text =
   case decimal text of
-    Left _ -> Nothing
-    Right (result, _) ->
-      guard (lower <= result && result <= upper) >> Just result
+    Left _            -> Nothing
+    Right (result, _) -> [result | lower <= result && result <= upper]
 
 validateHairColor :: Text -> Maybe Text
 validateHairColor text = do

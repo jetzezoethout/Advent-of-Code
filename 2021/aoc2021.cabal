@@ -11,6 +11,7 @@ common common
                         , OverloadedStrings
                         , OverloadedRecordDot
                         , InstanceSigs
+                        , MonadComprehensions
                         , DeriveFunctor
                         , TupleSections
     build-depends:    base ^>=4.17.2.1
@@ -30,7 +31,7 @@ library utils
                     , Grid
                     , Parsers
                     , ProcessFile
-                    , TaggedRow
+                    , LocatedChar
                     , Cached
     hs-source-dirs:   utils
     default-language: Haskell2010

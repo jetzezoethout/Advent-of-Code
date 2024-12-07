@@ -8,10 +8,10 @@ import           Data.Set        (Set)
 import qualified Data.Set        as S
 import           Data.Text       (Text)
 import qualified Data.Text       as T
+import           LocatedChar     (LocatedChar (..), locateTextLines)
 import           Parsers         (parseUnsignedInt)
 import           Reflectable     (Reflectable (reflectRows))
-import           Rotatable
-import           TaggedRow       (TaggedRow (..), zipLines)
+import           Rotatable       (Rotatable (..))
 
 type TileID = Int
 
@@ -36,13 +36,8 @@ instance Rotatable Tile where
       rotateSquare Coordinate {..} = Coordinate {row = column, column = 9 - row}
 
 parseTile :: [Text] -> Tile
-parseTile textLines = Tile $ S.fromList $ zipLines textLines >>= processRow
-  where
-    processRow TaggedRow {..} =
-      map (Coordinate rowIndex . fst)
-        $ filter ((== '#') . snd)
-        $ zip [0 ..]
-        $ T.unpack content
+parseTile =
+  Tile . S.fromList . map location . filter ((== '#') . char) . locateTextLines
 
 parseTiles :: Text -> Map TileID Tile
 parseTiles = M.fromList . map parseTileAndID . splitOn [""] . T.lines

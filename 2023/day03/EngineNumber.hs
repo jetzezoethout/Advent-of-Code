@@ -4,15 +4,25 @@ import           Coordinate     (Coordinate (..))
 import           Data.Text      (Text)
 import qualified Data.Text      as T
 import           Data.Text.Read (decimal)
-import           TaggedRow      (TaggedRow (..))
+
+data TaggedRow = TaggedRow
+  { rowIndex :: Int
+  , content  :: Text
+  } deriving (Show)
+
+parseTaggedLines :: Text -> [TaggedRow]
+parseTaggedLines = zipWith TaggedRow [0 ..] . T.lines
 
 data EngineNumber = EngineNumber
   { leftMostLocation :: Coordinate
   , value            :: Int
   } deriving (Show)
 
-parseEngineNumbers :: TaggedRow -> [EngineNumber]
-parseEngineNumbers TaggedRow {..} = getEngineNumbersStartingAt 0 content
+parseEngineNumbers :: Text -> [EngineNumber]
+parseEngineNumbers text = parseTaggedLines text >>= parseEngineNumbersOnRow
+
+parseEngineNumbersOnRow :: TaggedRow -> [EngineNumber]
+parseEngineNumbersOnRow TaggedRow {..} = getEngineNumbersStartingAt 0 content
   where
     getEngineNumbersStartingAt :: Int -> Text -> [EngineNumber]
     getEngineNumbersStartingAt _ "" = []

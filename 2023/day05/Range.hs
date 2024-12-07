@@ -1,6 +1,5 @@
 module Range where
 
-import           Control.Monad   (guard)
 import           Data.List.Split (chunksOf)
 import           Data.Maybe      (catMaybes)
 import           Data.Text       (Text)
@@ -13,7 +12,7 @@ data Range = Range
   } deriving (Show)
 
 makeRange :: Int -> Int -> Maybe Range
-makeRange start end = guard (start <= end) >> Just (Range start end)
+makeRange start end = [Range start end | start <= end]
 
 parseRanges :: Text -> [Range]
 parseRanges text =

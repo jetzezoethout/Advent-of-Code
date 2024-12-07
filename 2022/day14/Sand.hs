@@ -17,7 +17,7 @@ fallOneStep isBlocked coordinate =
     possibilities =
       [oneDown, oneDown `moveTowards` West, oneDown `moveTowards` East]
     goTo :: Coordinate -> Maybe Coordinate
-    goTo possibility = guard (not $ isBlocked possibility) >> Just possibility
+    goTo possibility = [possibility | not $ isBlocked possibility]
 
 fallDown :: Cave -> Coordinate -> Maybe Coordinate
 fallDown cave = go

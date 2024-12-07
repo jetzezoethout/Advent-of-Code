@@ -1,6 +1,5 @@
 module Gear where
 
-import           Control.Monad   (guard)
 import           EngineIndicator (EngineIndicator (..))
 import           EngineNumber    (EngineNumber (value), isAdjacentTo)
 
@@ -11,9 +10,10 @@ data Gear = Gear
 
 getGear :: [EngineNumber] -> EngineIndicator -> Maybe Gear
 getGear numbers EngineIndicator {..} =
-  guard (symbol == '*' && length adjacentNumbers == 2)
-    >> (Just
-          $ Gear {value1 = head adjacentNumbers, value2 = adjacentNumbers !! 1})
+  [ Gear {value1 = head adjacentNumbers, value2 = adjacentNumbers !! 1}
+  | symbol == '*'
+  , length adjacentNumbers == 2
+  ]
   where
     adjacentNumbers = map value $ filter (location `isAdjacentTo`) numbers
 

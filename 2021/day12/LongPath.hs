@@ -2,7 +2,6 @@ module LongPath where
 
 import           Cave          (Cave, CaveSystem, isEndCave, isSmallCave,
                                 isStartCave, startCave)
-import           Control.Monad (guard)
 import           Data.Map      ((!))
 import           Data.Maybe    (mapMaybe)
 import           Data.Set      (Set)
@@ -35,14 +34,14 @@ longPathGenerator caveSystem =
             if hasDoubleSmallCave
               then target `S.notMember` forbidden
               else not $ isStartCave target
-       in guard isAllowed
-            >> Just
-                 LongPath
-                   { currentCave = target
-                   , forbidden =
-                       if isSmallCave currentCave
-                         then S.insert currentCave forbidden
-                         else forbidden
-                   , hasDoubleSmallCave =
-                       hasDoubleSmallCave || target `S.member` forbidden
-                   }
+       in [ LongPath
+            { currentCave = target
+            , forbidden =
+                if isSmallCave currentCave
+                  then S.insert currentCave forbidden
+                  else forbidden
+            , hasDoubleSmallCave =
+                hasDoubleSmallCave || target `S.member` forbidden
+            }
+          | isAllowed
+          ]

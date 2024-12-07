@@ -28,7 +28,7 @@ isPossiblyOperational = (/= Damaged)
 
 dropLeadingGroup :: Int -> [Record] -> Maybe [Record]
 dropLeadingGroup 0 [] = Just []
-dropLeadingGroup 0 (r:rs) = guard (isPossiblyOperational r) >> Just rs
+dropLeadingGroup 0 (r:rs) = [rs | isPossiblyOperational r]
 dropLeadingGroup _ [] = Nothing
 dropLeadingGroup n (r:rs) =
   guard (isPossiblyDamaged r) >> dropLeadingGroup (n - 1) rs

@@ -1,12 +1,11 @@
 module AllergenChart where
 
-import           Control.Monad (guard)
-import           Data.List     (foldl', foldl1')
-import           Data.Map      (Map, fromSet)
-import qualified Data.Map      as M
-import           Data.Set      (Set)
-import qualified Data.Set      as S
-import           Food          (Allergen, Food (..), Ingredient)
+import           Data.List (foldl', foldl1')
+import           Data.Map  (Map, fromSet)
+import qualified Data.Map  as M
+import           Data.Set  (Set)
+import qualified Data.Set  as S
+import           Food      (Allergen, Food (..), Ingredient)
 
 type PossibleAllergens = Map Allergen (Set Ingredient)
 
@@ -38,7 +37,7 @@ solveAllergens = go
                          $ M.delete allergen possibilities
                   in M.insert allergen ingredient $ go remainingPossibilities
     fromSingleTon possibilities =
-      guard (S.size possibilities == 1) >> Just (head $ S.toList possibilities)
+      [head $ S.toList possibilities | S.size possibilities == 1]
 
 safeIngredients :: AllergenChart -> Food -> Int
 safeIngredients allergenChart Food {..} =

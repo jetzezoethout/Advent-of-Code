@@ -1,10 +1,9 @@
 module Grid where
 
-import           Control.Monad (guard)
-import           Coordinate    (Coordinate (..))
-import           Data.Text     (Text)
-import qualified Data.Text     as T
-import           Data.Vector   (Vector, fromList, (!))
+import           Coordinate  (Coordinate (..))
+import           Data.Text   (Text)
+import qualified Data.Text   as T
+import           Data.Vector (Vector, fromList, (!))
 
 data Grid a = Grid
   { height :: Int
@@ -34,7 +33,7 @@ Grid {..} `atCoordinate` Coordinate {..} = (grid ! row) ! column
 
 safeAtCoordinate :: Grid a -> Coordinate -> Maybe a
 grid `safeAtCoordinate` coordinate =
-  guard (coordinate `isInside` grid) >> Just (grid `atCoordinate` coordinate)
+  [grid `atCoordinate` coordinate | coordinate `isInside` grid]
 
 isInside :: Coordinate -> Grid a -> Bool
 Coordinate {..} `isInside` Grid {..} =

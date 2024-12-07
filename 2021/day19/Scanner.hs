@@ -1,6 +1,5 @@
 module Scanner where
 
-import           Control.Monad (guard)
 import           Data.Function (on)
 import           Data.List     (find, intersectBy)
 import           Data.Maybe    (fromJust)
@@ -37,13 +36,13 @@ pin RelativeScanner {..} =
 
 align :: AbsoluteScanner -> RelativeScanner -> Maybe AbsoluteScanner
 align AbsoluteScanner {..} RelativeScanner {..} =
-  guard (length commonNormals >= 66)
-    >> Just
-         AbsoluteScanner
-           { absBeacons = beacons
-           , absNormalVectors = allNormalVectors beacons
-           , absScannerPosition = scannerPosition
-           }
+  [ AbsoluteScanner
+    { absBeacons = beacons
+    , absNormalVectors = allNormalVectors beacons
+    , absScannerPosition = scannerPosition
+    }
+  | length commonNormals >= 66
+  ]
   where
     commonNormals =
       intersectBy ((==) `on` normalVector) absNormalVectors relNormalVectors

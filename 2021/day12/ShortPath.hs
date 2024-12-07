@@ -2,7 +2,6 @@ module ShortPath where
 
 import           Cave          (Cave, CaveSystem, isEndCave, isSmallCave,
                                 startCave)
-import           Control.Monad (guard)
 import           Data.Map      ((!))
 import           Data.Maybe    (mapMaybe)
 import           Data.Set      (Set)
@@ -25,12 +24,12 @@ shortPathGenerator caveSystem =
   where
     extension :: ShortPath -> Cave -> Maybe ShortPath
     extension ShortPath {..} target =
-      guard (target `S.notMember` forbidden)
-        >> Just
-             ShortPath
-               { currentCave = target
-               , forbidden =
-                   if isSmallCave currentCave
-                     then S.insert currentCave forbidden
-                     else forbidden
-               }
+      [ ShortPath
+        { currentCave = target
+        , forbidden =
+            if isSmallCave currentCave
+              then S.insert currentCave forbidden
+              else forbidden
+        }
+      | target `S.notMember` forbidden
+      ]

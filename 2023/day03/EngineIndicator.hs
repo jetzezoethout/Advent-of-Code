@@ -1,9 +1,10 @@
 module EngineIndicator where
 
-import           Coordinate (Coordinate (..))
-import           Data.Char  (isDigit)
-import qualified Data.Text  as T
-import           TaggedRow  (TaggedRow (..))
+import           Coordinate  (Coordinate (..))
+import           Data.Char   (isDigit)
+import           Data.Maybe  (mapMaybe)
+import           Data.Text   (Text)
+import           LocatedChar (LocatedChar (..), locateText)
 
 data EngineIndicator = EngineIndicator
   { location :: Coordinate
@@ -13,13 +14,10 @@ data EngineIndicator = EngineIndicator
 isIndicatorSymbol :: Char -> Bool
 isIndicatorSymbol ch = ch /= '.' && not (isDigit ch)
 
-parseEngineIndicators :: TaggedRow -> [EngineIndicator]
-parseEngineIndicators TaggedRow {..} =
-  filter (isIndicatorSymbol . symbol)
-    $ map
-        (\i ->
-           EngineIndicator
-             { location = Coordinate {row = rowIndex, column = i}
-             , symbol = T.index content i
-             })
-        [0 .. (T.length content - 1)]
+parseEngineIndicators :: Text -> [EngineIndicator]
+parseEngineIndicators = mapMaybe findIndicator . locateText
+  where
+    findIndicator LocatedChar {..} =
+      [ EngineIndicator {location = location, symbol = char}
+      | isIndicatorSymbol char
+      ]

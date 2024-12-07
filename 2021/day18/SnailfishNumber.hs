@@ -20,8 +20,10 @@ type Parser = StateT Text Maybe
 readChar :: Parser Char
 readChar = StateT T.uncons
 
-ensureChar :: Char -> Parser ()
-ensureChar ch = readChar >>= (guard . (ch ==))
+dropChar :: Char -> Parser ()
+dropChar ch = do
+  actual <- readChar
+  guard $ actual == ch
 
 readInt :: Parser Int
 readInt =
@@ -37,11 +39,11 @@ regularNumber path = do
 
 pair :: [Direction] -> Parser [Leaf]
 pair path = do
-  ensureChar '['
+  dropChar '['
   leftPart <- snailfishNumber (L : path)
-  ensureChar ','
+  dropChar ','
   rightPart <- snailfishNumber (R : path)
-  ensureChar ']'
+  dropChar ']'
   return $ leftPart <> rightPart
 
 snailfishNumber :: [Direction] -> Parser [Leaf]
