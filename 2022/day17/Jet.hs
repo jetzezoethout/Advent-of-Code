@@ -15,7 +15,7 @@ fromChar '>' = R
 fromChar _   = error "not a jet"
 
 parseJets :: Text -> [Jet]
-parseJets = map fromChar . T.unpack
+parseJets = map fromChar . T.unpack . T.strip
 
 toDirection :: Jet -> Direction
 toDirection L = West

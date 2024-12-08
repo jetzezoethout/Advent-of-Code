@@ -10,7 +10,7 @@ import           ProcessFile (processFile)
 main :: IO ()
 main =
   processFile $ \text -> do
-    let itemsToHash = T.split (== ',') text
+    let itemsToHash = T.split (== ',') $ T.strip text
         instructions = map parseInstruction itemsToHash
         finalBoxState = processAll instructions
     print $ sum $ map hash itemsToHash

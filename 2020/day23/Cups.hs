@@ -15,7 +15,7 @@ previousCup :: Cup -> Cup -> Cup
 previousCup maxCup cup = ((cup - 2) `mod` maxCup) + 1
 
 parseCupList :: Text -> [Int]
-parseCupList = map digitToInt . T.unpack
+parseCupList = map digitToInt . T.unpack . T.strip
 
 data Cups s = Cups
   { currentCup :: Cup
